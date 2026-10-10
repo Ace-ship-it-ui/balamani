@@ -42,3 +42,6 @@ The live-review worker is not configured. The script leaves the static reviews u
 ## Puppy viewings
 
 Apply migration 005 for a separate appointment system. Owners create non-overlapping start/end times in Europe/Malta, one family per appointment. Pending requests hold the slot until approved, declined or withdrawn. Confirmed viewings can be cancelled by owners. Viewing slots never affect kennel capacity or blocked dates. Clients see shared slot availability and only their own requests; owners see all requests. Closing an appointment prevents new requests and does not cancel existing appointments.
+
+The public navigation does not link to the client area. New browsers see an invitation-required notice instead of a login form. Successfully accepting an owner invitation remembers access to the login screen in that browser; existing validated sessions also remember it. On another browser or after clearing storage, ask an owner for a new private recovery link. This browser marker only controls the screen; the Edge Function still validates authenticated membership for every data request. GitHub Pages serves public static files and does not make the HTML itself private.
+
