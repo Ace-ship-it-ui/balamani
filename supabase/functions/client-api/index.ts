@@ -68,7 +68,7 @@ Deno.serve(async (req) => {
    if(action!=='recovery') {
     const code=Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('');
     checked(await admin.rpc('balamani_invitation_issue',{p_member:data.user.id,p_hash:await digest(code)}));
-    link=site+'#invite_code='+code;
+    link=site+'?v=durable-invites1#invite_code='+code;
    }
    return reply({link,email,type});
   }
