@@ -39,6 +39,21 @@ Deno.serve(async (req) => {
    actor=checked(await admin.rpc('balamani_actor',{p_id:data.user.id}));
    if(!actor) return reply({error:'Your account does not have client-area access. Contact Balamani.'},403);
   }
+  if(action==='account_delete') {
+   if(!actor.owner) return reply({error:'Owner access required'},403);
+   const memberId=String(body.member_id||'');
+   if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(memberId)) return reply({error:'Choose a client account'},400);
+   const member=checked(await admin.from('balamani_members').select('id,email').eq('id',memberId).maybeSingle());
+   if(!member) return reply({error:'Client account not found'},404);
+   if(checked(await admin.rpc('balamani_is_owner_email',{p_email:member.email}))) return reply({error:'Owner accounts are protected'},403);
+   if(String(body.confirm_email||'').trim().toLowerCase()!==member.email.toLowerCase()) return reply({error:'Type the client email to confirm permanent login removal'},400);
+   // Revoke app access before removing Auth credentials. Preserve booking references.
+   checked(await admin.rpc('balamani_viewing_change',{p_actor:actor.id,p_action:'view_create',p_data:{account_operation:'archive',member_id:member.id}}));
+   const deletion=await admin.auth.admin.deleteUser(member.id,true);
+   if(deletion.error) return reply({error:'Account archived, but permanent login removal failed. '+deletion.error.message},400);
+   checked(await admin.from('balamani_audit').insert({actor_id:actor.id,action:'account_delete_login',target_id:member.id}));
+   return reply({ok:true});
+  }
   if(action==='state') {
    let query=admin.from('balamani_bookings').select('*').order('created_at',{ascending:false}).limit(500);
    if(!actor.owner) query=query.eq('member_id',actor.id);
@@ -87,3 +102,4 @@ Deno.serve(async (req) => {
   return reply({error:message.includes('duplicate key')?'These dates have already been requested.':message},400);
  }
 });
+
