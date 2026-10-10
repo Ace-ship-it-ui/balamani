@@ -32,3 +32,7 @@ Deploy function changes through Supabase and website changes through GitHub Page
 ## Reviews
 
 The live-review worker is not configured. The script leaves the static reviews unchanged until a real worker URL is supplied. The displayed excerpt count is manually maintained; currently the label says 20 while the page contains 18 excerpt cards.
+
+## Puppy viewings
+
+Apply migration 005 for a separate appointment system. Owners create non-overlapping start/end times in Europe/Malta, one family per appointment. Pending requests hold the slot until approved, declined or withdrawn. Confirmed viewings can be cancelled by owners. Viewing slots never affect kennel capacity or blocked dates. Clients see shared slot availability and only their own requests; owners see all requests. Closing an appointment prevents new requests and does not cancel existing appointments.
