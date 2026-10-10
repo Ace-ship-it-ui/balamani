@@ -34,7 +34,8 @@ Deno.serve(async (req) => {
    const bookings=checked(await query);
    const blocks=checked(await admin.from('balamani_blocked_dates').select('day').order('day'));
    const members=actor.owner?checked(await admin.from('balamani_members').select('id,email,full_name,dog_name,active').order('created_at',{ascending:false}).limit(500)):[];
-   return reply({actor,bookings,blocks:blocks.map((x:any)=>x.day),members});
+   const occupancy=checked(await admin.rpc('balamani_occupancy'));
+   return reply({actor,bookings,blocks:blocks.map((x:any)=>x.day),members,occupancy});
   }
   if(['invite','recovery','bootstrap'].includes(action)) {
    if(!bootstrap && !actor.owner) return reply({error:'Owner access required'},403);
