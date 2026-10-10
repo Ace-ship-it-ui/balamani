@@ -17,9 +17,17 @@ In repository Settings > Pages, select **Deploy from a branch**, then **main** a
 
 Edit the HTML files in `docs/` and keep asset paths relative so the site works under the repository URL. The original laptop backups and unused image variants are not included.
 
-## Client area status
+## Client area
 
-The preview uses temporary in-tab data only. Real invitations, authentication, owner-only administration and cross-device calendar updates still require an online backend and email configuration. No customer records, passwords or service secrets belong in this public repository.
+`docs/client.html` is the real invite-only client login. Supabase project `pqkzhfcqpkcqttixoysr` stores accounts and bookings. Public registration is disabled. `supabase/migrations/001_client_area.sql` defines protected application tables and service-only procedures; `supabase/functions/client-api/index.ts` validates every user session and membership before reading data or accepting changes. Clients can only see their own bookings. Owners are configured in a private database table, never through user-editable metadata.
+
+Owners generate single-use invitation/recovery links and send them privately themselves. No email provider is required for this flow. The calendar polls shared state every 10 seconds and rechecks blocked dates inside the booking transaction. Capacity remains manual: confirming a stay does not automatically close dates. An owner can block new requests without cancelling existing stays.
+
+The Edge Function performs live `auth.getUser` validation; legacy-only gateway JWT verification is off to support modern signing keys. Initial owner links can be generated with the dashboard's server credential and the `bootstrap` action, restricted to the private owner allowlist. Never expose this credential in the website or repository. Owner activation is a separate controlled step.
+
+The prototype under `previews/` remains a local demonstration only. No customer records, passwords, generated invitation links or service secrets belong in this public repository. The browser publishable key is intentionally public; database privileges and server checks enforce access.
+
+Deploy function changes through Supabase and website changes through GitHub Pages. Database migrations must be applied before publishing dependent frontend changes. Update the fixed site URL and CORS origin in the function if the site moves to a custom domain.
 
 ## Reviews
 
