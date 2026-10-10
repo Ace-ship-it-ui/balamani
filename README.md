@@ -29,6 +29,12 @@ The prototype under `previews/` remains a local demonstration only. No customer 
 
 Deploy function changes through Supabase and website changes through GitHub Pages. Database migrations must be applied before publishing dependent frontend changes. Update the fixed site URL and CORS origin in the function if the site moves to a custom domain.
 
+## Invitation validity
+
+Apply `20261010170449_durable_invitations.sql` before deploying the updated client-api function. All newly generated invitations (including owner bootstrap links) remain valid until used once or replaced. Only SHA-256 hashes of random 256-bit tickets are stored in a private table. Redemption atomically consumes the ticket and creates a fresh short-lived Supabase Auth credential. Password-recovery links retain their normal expiry. Existing legacy invitation links must be replaced; their old Auth expiry cannot be removed.
+
+Generating a replacement invitation revokes any unused durable invitation for that account. If activation fails after acceptance, generate a replacement. Never publish generated private links.
+
 ## Reviews
 
 The live-review worker is not configured. The script leaves the static reviews unchanged until a real worker URL is supplied. The displayed excerpt count is manually maintained; currently the label says 20 while the page contains 18 excerpt cards.
