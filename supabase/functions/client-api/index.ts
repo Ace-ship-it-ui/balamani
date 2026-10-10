@@ -7,6 +7,7 @@ const site = 'https://ace-ship-it-ui.github.io/balamani/client.html';
 const headers = { 'Access-Control-Allow-Origin': 'https://ace-ship-it-ui.github.io', 'Access-Control-Allow-Headers': 'authorization, apikey, content-type', 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Cache-Control': 'no-store', 'Content-Type': 'application/json' };
 function reply(body: unknown, status = 200) { return new Response(JSON.stringify(body), { status, headers }); }
 function checked(result: any) { if (result.error) throw new Error(result.error.message); return result.data; }
+async function digest(value: string) { return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value))),b=>b.toString(16).padStart(2,'0')).join(''); }
 
 Deno.serve(async (req) => {
  if (req.method === 'OPTIONS') return new Response(null, { headers });
@@ -15,6 +16,16 @@ Deno.serve(async (req) => {
   const bearer = (req.headers.get('authorization') || '').replace(/^Bearer /i, '');
   const body = await req.json();
   const action = body.action;
+  if(action==='accept_invitation') {
+   const code=String(body.code||'');
+   if(!/^[0-9a-f]{64}$/.test(code)) return reply({error:'Invalid invitation. Ask an owner for a replacement.'},400);
+   const member=checked(await admin.rpc('balamani_invitation_consume',{p_hash:await digest(code)}));
+   if(!member) return reply({error:'This invitation has already been used or replaced. Ask an owner for a new one.'},400);
+   // Mint the short-lived Auth credential only when the recipient accepts.
+   const result=await admin.auth.admin.generateLink({type:'recovery',email:member.email,options:{redirectTo:site}});
+   if(result.error || result.data.user.id!==member.id) return reply({error:'Unable to activate access. Ask an owner for a replacement invitation.'},400);
+   return reply({token_hash:result.data.properties.hashed_token,type:'recovery'});
+  }
   // Bootstrap is available solely to the project's server credential, never a browser key.
   const serverKeys = Object.values(JSON.parse(Deno.env.get('SUPABASE_SECRET_KEYS') || '{}'));
   const suppliedKey = req.headers.get('apikey') || '';
@@ -46,14 +57,19 @@ Deno.serve(async (req) => {
    const existing=checked(await admin.from('balamani_members').select('id,active').eq('email',email).maybeSingle());
    if(existing && !existing.active) return reply({error:'This account is inactive'},403);
    if(action==='recovery' && !existing) return reply({error:'Invite this client first'},400);
-   // Limit credential-link generation per owner; links are never stored in application tables.
+   // Limit credential-link generation per owner; raw links are never stored.
    if(actor){const since=new Date(Date.now()-3600000).toISOString();const recent=await admin.from('balamani_audit').select('id',{count:'exact',head:true}).eq('actor_id',actor.id).eq('action','link').gte('created_at',since);if(recent.error)throw recent.error;if((recent.count||0)>=20)return reply({error:'Hourly invitation limit reached. Try later.'},429);}
    const type=existing?'recovery':'invite';
    const data=checked(await admin.auth.admin.generateLink({type,email,options:{redirectTo:site}}));
    if(!existing) checked(await admin.from('balamani_members').insert({id:data.user.id,email}));
    checked(await admin.from('balamani_audit').insert({actor_id:actor?.id||null,action:'link',target_id:data.user.id}));
    // Fragment avoids putting the credential into HTTP requests, referers, or Pages access logs.
-   const link=site+'#token_hash='+encodeURIComponent(data.properties.hashed_token)+'&type='+type;
+   let link=site+'#token_hash='+encodeURIComponent(data.properties.hashed_token)+'&type='+type;
+   if(action!=='recovery') {
+    const code=Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('');
+    checked(await admin.rpc('balamani_invitation_issue',{p_member:data.user.id,p_hash:await digest(code)}));
+    link=site+'#invite_code='+code;
+   }
    return reply({link,email,type});
   }
   if(['view_create','view_close','view_request','view_decision','view_cancel'].includes(action)) {
