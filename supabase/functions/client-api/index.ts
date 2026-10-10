@@ -35,7 +35,8 @@ Deno.serve(async (req) => {
    const blocks=checked(await admin.from('balamani_blocked_dates').select('day').order('day'));
    const members=actor.owner?checked(await admin.from('balamani_members').select('id,email,full_name,dog_name,active').order('created_at',{ascending:false}).limit(500)):[];
    const occupancy=checked(await admin.rpc('balamani_occupancy'));
-   return reply({actor,bookings,blocks:blocks.map((x:any)=>x.day),members,occupancy});
+   const viewings=checked(await admin.rpc('balamani_viewing_state',{p_actor:actor.id}));
+   return reply({actor,bookings,blocks:blocks.map((x:any)=>x.day),members,occupancy,viewings});
   }
   if(['invite','recovery','bootstrap'].includes(action)) {
    if(!bootstrap && !actor.owner) return reply({error:'Owner access required'},403);
@@ -54,6 +55,10 @@ Deno.serve(async (req) => {
    // Fragment avoids putting the credential into HTTP requests, referers, or Pages access logs.
    const link=site+'#token_hash='+encodeURIComponent(data.properties.hashed_token)+'&type='+type;
    return reply({link,email,type});
+  }
+  if(['view_create','view_close','view_request','view_decision','view_cancel'].includes(action)) {
+   checked(await admin.rpc('balamani_viewing_change',{p_actor:actor.id,p_action:action,p_data:body}));
+   return reply({ok:true});
   }
   if(['request','decision','cancel','block','profile'].includes(action)) {
    checked(await admin.rpc('balamani_change',{p_actor:actor.id,p_action:action,p_data:body}));
