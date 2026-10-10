@@ -1,0 +1,493 @@
+/* =========================
+   Colour palette
+========================= */
+
+:root {
+    --ivory: #f8f6f2;
+    --white: #ffffff;
+    --charcoal: #1a1a1a;
+    --dark-text: #2c2c2c;
+    --body-text: #555555;
+    --gold: #b58a3c;
+    --light-gold: #d4af37;
+    --soft-gold: #d7c29a;
+}
+
+
+/* =========================
+   Page reset
+========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--ivory);
+    color: var(--body-text);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+/* =========================
+   Main page container
+========================= */
+
+#container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* =========================
+   Header
+========================= */
+
+header {
+    padding: 20px;
+    background-color: var(--white);
+    text-align: center;
+}
+
+
+/* =========================
+   Logo
+========================= */
+
+
+#logo {
+    width: 220px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    padding: 10px 0;
+}
+
+
+/* =========================
+   Navigation bar
+========================= */
+
+nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    margin: 0;
+    padding: 12px 20px;
+
+    background-color: var(--charcoal);
+    font-size: 22px;
+}
+
+nav a {
+    padding: 6px 12px;
+
+    color: var(--white);
+    text-decoration: none;
+
+    border-bottom: 2px solid transparent;
+
+    transition:
+        color 0.3s ease,
+        border-color 0.3s ease;
+}
+
+nav a:hover {
+    color: var(--light-gold);
+    border-bottom-color: var(--light-gold);
+}
+
+nav a:focus {
+    color: var(--light-gold);
+    outline: 2px solid var(--soft-gold);
+    outline-offset: 4px;
+}
+
+
+/* =========================
+   Main content
+========================= */
+
+main {
+    flex: 1;
+
+    margin: 0;
+    padding: 30px;
+
+    background-color: var(--ivory);
+}
+
+main h1,
+main h2,
+main h3 {
+    color: var(--dark-text);
+}
+
+main h1,
+main h2 {
+    border-bottom: 2px solid var(--soft-gold);
+    padding-bottom: 8px;
+}
+
+main p {
+    line-height: 1.6;
+}
+
+
+/* =========================
+   Main content layout
+========================= */
+
+#mains {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    gap: 30px;
+}
+
+
+/* =========================
+   Home section
+========================= */
+
+.home {
+    width: 400px;
+    min-height: 400px;
+    padding: 25px;
+
+    background-color: var(--white);
+    border: 2px solid var(--soft-gold);
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+
+    font-size: 20px;
+}
+
+#home {
+    text-align: center;
+}
+
+
+/* =========================
+   Flexbox content
+========================= */
+
+.flexbox {
+    display: flex;
+    gap: 30px;
+    min-height: 500px;
+}
+
+.chunk {
+    padding: 25px;
+
+    background-color: var(--white);
+    border: 2px solid var(--soft-gold);
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+
+/* =========================
+   Left and right sections
+========================= */
+
+#left,
+#right {
+    width: 50%;
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+}
+
+
+/* =========================
+   Tables
+========================= */
+
+table {
+    width: 60%;
+    margin: 20px auto;
+
+    background-color: var(--white);
+    border: 2px solid var(--soft-gold);
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 12px;
+    border: 1px solid var(--soft-gold);
+}
+
+th {
+    background-color: var(--charcoal);
+    color: var(--white);
+}
+
+tr:nth-child(even) {
+    background-color: var(--ivory);
+}
+
+#tweaking th {
+    text-align: left;
+}
+
+#tweaking .th2 {
+    font-weight: bold;
+}
+
+
+/* =========================
+   Map and information
+========================= */
+
+#map,
+#info {
+    width: 50%;
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+}
+
+#map iframe {
+    max-width: 100%;
+    border: 2px solid var(--soft-gold);
+    border-radius: 12px;
+}
+
+
+/* =========================
+   Buttons
+========================= */
+
+button,
+.button {
+    display: inline-block;
+
+    padding: 10px 20px;
+
+    background-color: var(--gold);
+    color: var(--white);
+
+    border: none;
+    border-radius: 8px;
+
+    font-size: 16px;
+    text-decoration: none;
+    cursor: pointer;
+
+    transition:
+        background-color 0.3s ease,
+        transform 0.3s ease;
+}
+
+button:hover,
+.button:hover {
+    background-color: var(--light-gold);
+    transform: translateY(-2px);
+}
+
+
+/* =========================
+   Images
+========================= */
+
+main img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+
+/* =========================
+   Footer
+========================= */
+
+footer {
+    margin: 0;
+    padding: 15px;
+
+    background-color: var(--charcoal);
+    color: var(--white);
+
+    text-align: center;
+    border-top: 3px solid var(--gold);
+}
+
+footer p {
+    margin: 0;
+}
+
+footer img {
+    display: block;
+    margin: 10px auto 0;
+
+    transition: transform 0.3s ease;
+}
+
+footer img:hover {
+    transform: scale(1.1);
+}
+
+
+/* =========================
+   Responsive design
+========================= */
+
+@media screen and (max-width: 768px) {
+
+    nav {
+        flex-direction: column;
+        gap: 8px;
+        font-size: 19px;
+    }
+
+    nav a {
+        width: 100%;
+        text-align: center;
+    }
+
+    main {
+        padding: 20px;
+    }
+
+    #mains,
+    .flexbox {
+        flex-direction: column;
+    }
+
+    .home,
+    .chunk,
+    #left,
+    #right,
+    #map,
+    #info {
+        width: 100%;
+    }
+
+    table {
+        width: 100%;
+    }
+}
+/* Customer reviews */
+.reviews-summary {
+    margin: 24px 0 32px;
+}
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: 24px;
+}
+.review-card h3 {
+    margin-top: 0;
+}
+.review-recommendation {
+    font-weight: 600;
+    color: var(--dark-text);
+}
+.review-card a {
+    color: #765a28;
+    text-underline-offset: 3px;
+}
+nav a[aria-current="page"] {
+    color: var(--light-gold);
+    border-bottom-color: var(--light-gold);
+}
+/* Homepage and enquiry pages */
+nav { flex-wrap: wrap; gap: 8px; }
+main { width: 100%; max-width: 1200px; margin: 0 auto; }
+main a:not(.button) { color: #765a28; text-underline-offset: 4px; }
+.welcome { padding: 35px 0 45px; max-width: 850px; }
+.welcome h1 { font-family: Georgia, serif; font-size: clamp(2.2rem, 5vw, 3.8rem); line-height: 1.15; margin: 15px 0 24px; border: 0; }
+.eyebrow { color: #765a28; text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem; font-weight: 600; }
+.intro { font-size: 1.2rem; max-width: 720px; }
+.page-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.button { background-color: #765a28; }
+.button.secondary { background-color: var(--charcoal); }
+.feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr)); gap: 24px; margin-bottom: 32px; }
+.feature-grid .chunk { min-width: 0; overflow-wrap: anywhere; }
+.feature-grid h2 { margin-top: 0; }
+@media screen and (max-width: 768px) { .welcome { padding: 15px 0 28px; } }
+.review-card blockquote { margin: 18px 0; padding-left: 16px; border-left: 3px solid var(--soft-gold); }
+.review-card blockquote p { font-style: italic; }
+
+/* Our Dogs page */
+.dogs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 24px;
+    margin: 20px 0 32px;
+}
+.dog-card h3 { margin-top: 0; }
+.dog-photo-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
+    margin-bottom: 16px;
+    background-color: var(--ivory);
+    border: 2px dashed var(--soft-gold);
+    border-radius: 10px;
+    color: var(--body-text);
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 12px;
+}
+.dog-details {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4px 10px;
+    margin: 0 0 12px;
+    font-size: 0.95rem;
+}
+.dog-details div { display: contents; }
+.dog-details dt { font-weight: 600; color: var(--dark-text); }
+.dog-details dd { margin: 0; }
+
+/* Footer social links */
+footer #social { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 10px; }
+footer #social a { display: inline-flex; border-radius: 50%; }
+footer #social img { width: 48px; height: 48px; margin: 0; }
+footer #social a:focus-visible { outline: 2px solid var(--soft-gold); outline-offset: 4px; }
+
+/* Show the original symbol through a circular crop, without background margins. */
+footer #social a[href="https://wa.me/35677070998"] {
+    position: relative;
+    display: block;
+    flex: 0 0 48px;
+    width: 48px;
+    height: 48px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+footer #social img[src="assets/images/whatsapp-original.png"],
+footer #social img[src="assets/images/whatsapp-original.png"]:hover {
+    position: absolute;
+    width: 68.408px;
+    max-width: none;
+    height: auto;
+    left: -10.204px;
+    top: -10.204px;
+    margin: 0;
+    border-radius: 0;
+    clip-path: none;
+    transform: none;
+    transition: none;
+}
+/* Legal navigation stays in the footer. */
+footer .footer-legal a { color: var(--light-gold); text-underline-offset: 4px; }
+footer .footer-legal a:focus-visible { outline: 2px solid var(--soft-gold); outline-offset: 4px; }
