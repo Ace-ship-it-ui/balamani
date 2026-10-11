@@ -46,12 +46,10 @@ Deno.serve(async (req) => {
    const member=checked(await admin.from('balamani_members').select('id,email').eq('id',memberId).maybeSingle());
    if(!member) return reply({error:'Client account not found'},404);
    if(checked(await admin.rpc('balamani_is_owner_email',{p_email:member.email}))) return reply({error:'Owner accounts are protected'},403);
-   if(String(body.confirm_email||'').trim().toLowerCase()!==member.email.toLowerCase()) return reply({error:'Type the client email to confirm permanent login removal'},400);
-   // Revoke app access before removing Auth credentials. Preserve booking references.
+   if(String(body.confirm_email||'').trim().toLowerCase()!==member.email.toLowerCase()) return reply({error:'Confirm the client email to archive the account'},400);
+   // Recoverable deletion: revoke app access while retaining login and history.
    checked(await admin.rpc('balamani_viewing_change',{p_actor:actor.id,p_action:'view_create',p_data:{account_operation:'archive',member_id:member.id}}));
-   const deletion=await admin.auth.admin.deleteUser(member.id,true);
-   if(deletion.error) return reply({error:'Account archived, but permanent login removal failed. '+deletion.error.message},400);
-   checked(await admin.from('balamani_audit').insert({actor_id:actor.id,action:'account_delete_login',target_id:member.id}));
+   checked(await admin.from('balamani_audit').insert({actor_id:actor.id,action:'account_delete_archive',target_id:member.id}));
    return reply({ok:true});
   }
   if(action==='state') {
@@ -70,13 +68,21 @@ Deno.serve(async (req) => {
    if(email.length>254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return reply({error:'Enter a valid email address'},400);
    if(bootstrap && !checked(await admin.rpc('balamani_is_owner_email',{p_email:email}))) return reply({error:'Bootstrap is restricted to configured owners'},403);
    const existing=checked(await admin.from('balamani_members').select('id,active').eq('email',email).maybeSingle());
-   if(existing && !existing.active) return reply({error:'This account is inactive'},403);
+   let restoreArchived=false;
+   if(existing && !existing.active){
+    const accounts=checked(await admin.rpc('balamani_viewing_state',{p_actor:actor?.id})).accounts||[];
+    const account=accounts.find((a:any)=>a.id===existing.id);
+    restoreArchived=action==='invite' && account?.archived && !account.permanently_deleted;
+    if(!restoreArchived) return reply({error:'This account is suspended or its login was permanently removed. Restore access first.'},403);
+   }
    if(action==='recovery' && !existing) return reply({error:'Invite this client first'},400);
    // Limit credential-link generation per owner; raw links are never stored.
    if(actor){const since=new Date(Date.now()-3600000).toISOString();const recent=await admin.from('balamani_audit').select('id',{count:'exact',head:true}).eq('actor_id',actor.id).eq('action','link').gte('created_at',since);if(recent.error)throw recent.error;if((recent.count||0)>=20)return reply({error:'Hourly invitation limit reached. Try later.'},429);}
    const type=existing?'recovery':'invite';
    const data=checked(await admin.auth.admin.generateLink({type,email,options:{redirectTo:site}}));
+   if(existing && data.user.id!==existing.id) return reply({error:'Account identity mismatch. Contact Balamani.'},400);
    if(!existing) checked(await admin.from('balamani_members').insert({id:data.user.id,email}));
+   if(restoreArchived) checked(await admin.rpc('balamani_viewing_change',{p_actor:actor.id,p_action:'view_create',p_data:{account_operation:'restore',member_id:existing.id}}));
    checked(await admin.from('balamani_audit').insert({actor_id:actor?.id||null,action:'link',target_id:data.user.id}));
    // Fragment avoids putting the credential into HTTP requests, referers, or Pages access logs.
    let link=site+'#token_hash='+encodeURIComponent(data.properties.hashed_token)+'&type='+type;
