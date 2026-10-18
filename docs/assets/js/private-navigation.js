@@ -62,15 +62,29 @@ window.addEventListener('storage',showClientNavigation);
  `;document.head.appendChild(style);
  const pet=document.createElement('aside');pet.id='balamani-companion';pet.setAttribute('aria-label','Play with Aizen');
  pet.innerHTML=`<button class="pet-close" type="button" aria-label="Go to bed">Go to bed</button><div class="pet-content">
- <h2>Play with Aizen</h2><div class="pet-scene"><svg viewBox="0 0 220 145" role="img" aria-label="Animated fawn and white Shih Tzu Aizen"><ellipse cx="105" cy="124" rx="70" ry="7" fill="#d4c7b2"/><g class="aizen-dog">
+ <h2>Play with Aizen</h2><div class="pet-scene"><svg viewBox="0 0 220 145" role="img" aria-label="Animated fawn and white Shih Tzu Aizen">
+ <defs>
+ <radialGradient id="aizen-fawn" cx=".38" cy=".25" r=".8"><stop stop-color="#eedbc0"/><stop offset=".55" stop-color="#c4a17c"/><stop offset="1" stop-color="#967153"/></radialGradient>
+ <radialGradient id="aizen-white" cx=".4" cy=".2" r=".9"><stop stop-color="#fffef7"/><stop offset=".65" stop-color="#eee5d7"/><stop offset="1" stop-color="#c6b49c"/></radialGradient>
+ <linearGradient id="aizen-ear" x2=".8" y2="1"><stop stop-color="#bc9876"/><stop offset=".6" stop-color="#927257"/><stop offset="1" stop-color="#5d493b"/></linearGradient>
+ <radialGradient id="aizen-eye"><stop stop-color="#6b4931"/><stop offset=".55" stop-color="#35271f"/><stop offset="1" stop-color="#100e0d"/></radialGradient>
+ </defs>
+ <ellipse cx="105" cy="124" rx="60" ry="4" fill="#493726" opacity=".16"/><g class="aizen-dog">
  <path class="aizen-tail" d="M140 83 Q178 43 157 47 Q142 48 151 62" fill="none" stroke="#fff8eb" stroke-width="17" stroke-linecap="round"/>
- <ellipse cx="112" cy="91" rx="43" ry="25" fill="#c6a078"/><ellipse cx="112" cy="97" rx="29" ry="18" fill="#fff8eb"/><ellipse class="aizen-belly" cx="112" cy="97" rx="23" ry="14" fill="#edc5b6"/>
- <g class="aizen-leg" fill="#fff8eb"><rect x="78" y="99" width="16" height="25" rx="7"/><rect x="128" y="99" width="16" height="25" rx="7"/></g>
- <g class="aizen-head"><ellipse cx="49" cy="65" rx="15" ry="28" fill="#9f7857"/><ellipse cx="98" cy="65" rx="15" ry="28" fill="#9f7857"/>
- <path d="M43 51 Q39 24 63 27 L73 19 L81 27 Q109 25 105 55 L100 78 Q74 96 45 78Z" fill="#d4b48d"/><path d="M67 29 L78 28 L81 55 L91 71 L73 83 L56 71 L69 54Z" fill="#fff8eb"/>
- <g class="aizen-eye" fill="#281f1a"><ellipse cx="60" cy="52" rx="7" ry="8"/><ellipse cx="88" cy="52" rx="7" ry="8"/></g><g fill="white"><circle cx="58" cy="50" r="2"/><circle cx="86" cy="50" r="2"/></g>
- <ellipse cx="63" cy="69" rx="16" ry="12" fill="#fff8eb"/><ellipse cx="84" cy="69" rx="16" ry="12" fill="#fff8eb"/><ellipse cx="74" cy="63" rx="8" ry="6" fill="#281f1a"/><path d="M68 77 Q74 82 80 77 L77 87 Q73 91 70 86Z" fill="#df9498"/>
- <path d="M46 43 L40 49 M45 60 L38 65 M99 40 L108 46 M103 60 L111 65" stroke="#e8d2b3" stroke-width="4" stroke-linecap="round"/></g></g>
+ <ellipse cx="112" cy="91" rx="43" ry="25" fill="url(#aizen-fawn)"/><ellipse cx="112" cy="97" rx="29" ry="18" fill="url(#aizen-white)"/><ellipse class="aizen-belly" cx="112" cy="97" rx="23" ry="14" fill="#edc5b6"/>
+ <path d="M100 72 Q109 83 107 103 M117 71 Q125 83 123 108 M134 79 Q143 89 142 99" stroke="#f1e1c9" stroke-width="1.3" opacity=".65" fill="none"/>
+ <g class="aizen-leg" fill="url(#aizen-white)"><path d="M80 99 Q75 106 78 119 Q73 126 83 127 L96 126 Q101 122 93 119 L94 103Z"/><path d="M130 99 Q127 110 130 119 Q125 126 135 127 L148 126 Q152 121 144 119 L145 103Z"/></g>
+ <g class="aizen-head"><path d="M51 37 Q30 36 33 65 L35 83 L40 89 L44 84 L48 89 Q58 76 59 54Z" fill="url(#aizen-ear)"/><path d="M96 37 Q115 38 112 66 L109 85 L103 90 L99 85 L95 89 Q86 71 88 51Z" fill="url(#aizen-ear)"/>
+ <path d="M42 50 Q40 30 59 27 L64 23 L68 26 L74 21 L80 26 L86 24 Q108 29 105 55 L101 75 Q75 91 45 75Z" fill="url(#aizen-fawn)"/>
+ <path d="M66 28 Q72 34 67 49 L61 62 L73 78 L86 62 L79 48 Q74 36 81 27" fill="url(#aizen-white)"/>
+ <g fill="none" stroke="#f4e2c7" stroke-width="1.1" opacity=".85"><path d="M48 39 Q53 31 64 31 M45 44 Q53 36 62 35 M84 32 Q97 34 102 42 M86 36 Q98 39 102 46 M69 29 L72 42 M76 27 L75 40"/><path d="M38 51 L39 76 M42 46 L44 81 M47 45 L48 75 M105 48 L104 79 M100 46 L99 77"/></g>
+ <g class="aizen-eye" fill="url(#aizen-eye)" stroke="#5c4434" stroke-width="1"><ellipse cx="60" cy="52" rx="7.5" ry="8"/><ellipse cx="88" cy="52" rx="7.5" ry="8"/></g>
+ <g fill="#fff"><circle cx="58" cy="49.5" r="2.3"/><circle cx="86" cy="49.5" r="2.3"/><circle cx="63" cy="55" r=".8"/><circle cx="91" cy="55" r=".8"/></g>
+ <path d="M51 59 Q63 53 74 61 Q85 53 97 60 L99 73 L94 78 L89 77 L86 83 L78 81 L74 85 L68 81 L61 83 L57 78 L50 79 L47 69Z" fill="url(#aizen-white)"/>
+ <path d="M68 77 Q74 82 80 77 L77 86 Q73 89 70 85Z" fill="#bd777b"/><path d="M74 78 L74 85" stroke="#8f5356" stroke-width=".7"/>
+ <path d="M66 62 Q74 56 82 62 Q82 69 74 70 Q67 68 66 62" fill="#201c1b"/><ellipse cx="72" cy="61" rx="3.5" ry="1.2" fill="#77716d"/><path d="M74 69 L74 74 M67 74 Q74 78 81 74" stroke="#665347" stroke-width=".8" fill="none"/>
+ <g stroke="#bbaa95" stroke-width=".65" fill="none"><path d="M59 65 L51 72 M63 65 L55 77 M67 69 L63 80 M88 65 L95 72 M84 67 L91 78 M80 70 L84 81 M69 78 L68 83 M79 78 L80 83"/></g>
+ </g></g>
  <g class="aizen-ball"><circle cx="112" cy="117" r="8" fill="#b3cb55"/><path d="M107 111 Q116 117 107 123" fill="none" stroke="#fff" stroke-width="2"/></g></svg><span class="pet-effect" aria-hidden="true"></span></div>
  <p>Make a happy pup: try all three!</p><progress max="100" value="0" aria-label="Aizen happiness"></progress>
  <p class="pet-status" role="status">Aizen is ready to play. 0/3</p>
