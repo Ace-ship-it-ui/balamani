@@ -78,17 +78,41 @@ window.addEventListener('storage',showClientNavigation);
  </div>
  <button class="pet-open" type="button" hidden>Wake Aizen</button>`;
  document.body.appendChild(pet);
+ const freeStyle=document.createElement('style');
+ freeStyle.textContent=`
+ #balamani-companion{width:160px;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;pointer-events:none}
+ #balamani-companion .pet-scene{background:transparent;border:0;border-radius:0;overflow:visible;cursor:pointer;pointer-events:auto}
+ #balamani-companion svg{height:112px;overflow:visible}
+ #balamani-companion .pet-scene:focus-visible{outline:2px solid #927447;border-radius:12px}
+ #balamani-companion .pet-content>h2,#balamani-companion .pet-content>p,#balamani-companion progress,#balamani-companion .pet-actions,#balamani-companion .pet-close{display:none}
+ #balamani-companion.menu-open .pet-actions{display:grid;position:absolute;bottom:115px;right:0;width:190px;padding:10px;background:#fffdf8;border:1px solid #d8c197;border-radius:15px;box-shadow:0 4px 18px #34271c22;pointer-events:auto}
+ #balamani-companion.menu-open .pet-close{display:block;position:absolute;right:0;top:auto;bottom:245px;background:#fffdf8;border:1px solid #d8c197;border-radius:10px;pointer-events:auto;font-size:12px;padding:6px 10px}
+ #balamani-companion .pet-open{pointer-events:auto}
+ #balamani-companion.pet-hidden{width:auto;padding:0}
+ #balamani-companion.running{animation:across-screen 4s ease-in-out}
+ #balamani-companion .action-play .aizen-dog{animation:none}
+ #balamani-companion .action-play .aizen-ball{animation:leading-ball 4s linear}
+ @keyframes across-screen{0%,100%{transform:translateX(0)}40%,55%{transform:translateX(calc(-100vw + 185px))}}
+ @keyframes leading-ball{0%,95%{opacity:1;transform:translateX(-70px)}100%{opacity:0}}
+ @media(max-width:480px){#balamani-companion{width:135px;padding:0}#balamani-companion svg{height:100px}}
+ @media(prefers-reduced-motion:reduce){#balamani-companion.running{animation:none}}
+ `;document.head.appendChild(freeStyle);
+ const scene=pet.querySelector('.pet-scene');
+ scene.setAttribute('role','button');scene.setAttribute('tabindex','0');scene.setAttribute('aria-label','Aizen: open activities');scene.setAttribute('aria-expanded','false');
+ function toggleMenu(){const shown=pet.classList.toggle('menu-open');scene.setAttribute('aria-expanded',String(shown))}
+ scene.addEventListener('click',toggleMenu);
+ scene.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleMenu()}if(event.key==='Escape'){pet.classList.remove('menu-open');scene.setAttribute('aria-expanded','false')}});
  const open=pet.querySelector('.pet-open'),status=pet.querySelector('.pet-status'),meter=pet.querySelector('progress'),image=pet.querySelector('svg'),effect=pet.querySelector('.pet-effect');
  const seen=new Set();let timer;
  const replies={treat:['A tasty virtual treat!','🦴'],rub:['Aizen loves his belly rub!','💕'],play:['Good catch, Aizen!','🎾']};
- function hide(){pet.classList.add('pet-hidden');open.hidden=false;try{sessionStorage.setItem('balamani-pet-hidden','1')}catch{}}
+ function hide(){pet.classList.remove('menu-open','running');scene.setAttribute('aria-expanded','false');pet.classList.add('pet-hidden');open.hidden=false;try{sessionStorage.setItem('balamani-pet-hidden','1')}catch{}}
  pet.querySelector('.pet-close').addEventListener('click',()=>{hide();open.focus()});
- open.addEventListener('click',()=>{pet.classList.remove('pet-hidden');open.hidden=true;try{sessionStorage.removeItem('balamani-pet-hidden')}catch{}pet.querySelector('[data-action]').focus()});
+ open.addEventListener('click',()=>{pet.classList.remove('pet-hidden');open.hidden=true;try{sessionStorage.removeItem('balamani-pet-hidden')}catch{}scene.focus()});
  pet.querySelectorAll('[data-action]').forEach(button=>button.addEventListener('click',()=>{
  const action=button.dataset.action;seen.add(action);meter.value=Math.round(seen.size/3*100);
  status.textContent=seen.size===3?'Happy pup! You are Aizen’s new friend. 3/3':replies[action][0]+' '+seen.size+'/3';
- clearTimeout(timer);image.classList.remove('action-play','action-rub','action-treat');void image.getBoundingClientRect();image.classList.add('action-'+action);effect.textContent=action==='rub'?'💕':action==='treat'?'🦴':'';
- timer=setTimeout(()=>{effect.textContent='';image.classList.remove('action-play','action-rub','action-treat')},3100);
+ clearTimeout(timer);pet.classList.remove('menu-open','running');scene.setAttribute('aria-expanded','false');scene.focus();image.classList.remove('action-play','action-rub','action-treat');void image.getBoundingClientRect();image.classList.add('action-'+action);if(action==='play')pet.classList.add('running');effect.textContent=action==='rub'?'💕':action==='treat'?'🦴':'';
+ timer=setTimeout(()=>{effect.textContent='';pet.classList.remove('running');image.classList.remove('action-play','action-rub','action-treat')},action==='play'?4100:3100);
  }));
  try{if(sessionStorage.getItem('balamani-pet-hidden')==='1')hide()}catch{}
 })();
