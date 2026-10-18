@@ -10,6 +10,13 @@ function showClientNavigation(){
  else if(!invited&&link)link.remove();
 }
 showClientNavigation();
+function showGalleryNavigation(){
+ const nav=document.querySelector('nav[aria-label="Main navigation"]');
+ if(!nav||nav.querySelector('a[href="gallery.html"]'))return;
+ const link=document.createElement('a');link.href='gallery.html';link.textContent='Gallery';
+ const contact=nav.querySelector('a[href="contact.html"]');nav.insertBefore(link,contact);
+}
+showGalleryNavigation();
 window.addEventListener('pageshow',showClientNavigation);
 window.addEventListener('storage',showClientNavigation);
 
