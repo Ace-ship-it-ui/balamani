@@ -6,3 +6,5 @@
 
 
 .remember-option{display:flex;align-items:center;gap:.5rem;margin:1rem 0}.remember-option input[type=checkbox]{width:auto;margin:0;padding:0;accent-color:#806039}
+
+.install-help { max-width: 1150px; margin: 0 auto; padding: 12px 24px 0; }

@@ -6,7 +6,7 @@ function showClientNavigation(){
  const nav=document.querySelector('nav[aria-label="Main navigation"]');
  if(!nav)return;
  let link=nav.querySelector('[data-client-area]');
- if(invited&&!link){link=document.createElement('a');link.href='client.html';link.textContent='Client area';link.setAttribute('data-client-area','');nav.appendChild(link)}
+ if(invited&&!link){link=document.createElement('a');link.href='booking-app/';link.textContent='Booking app';link.setAttribute('data-client-area','');nav.appendChild(link)}
  else if(!invited&&link)link.remove();
 }
 showClientNavigation();

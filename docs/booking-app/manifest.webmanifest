@@ -1,0 +1,23 @@
+{
+  "id": "./",
+  "name": "Balamani Bookings",
+  "short_name": "Balamani",
+  "description": "Kennel stays and puppy viewing appointments for invited Balamani clients.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "theme_color": "#765a28",
+  "background_color": "#f8f6f2",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
